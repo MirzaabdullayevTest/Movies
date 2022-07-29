@@ -22,6 +22,22 @@ app.post('/add', async (req, res) => {
     await movie.save()
     res.status(201).send('Movie created')
 })
+
+// app.get('/movies/', async (req, res) => {
+//     const movies = await Movie.find()
+//     res.status(200).send(movies)
+// })
+
+
+app.get('/movies/', async (req, res) => {
+    const page = req.query.page
+    const count = req.query.count
+
+    const movies = await Movie.find()
+        .limit(count).skip((page - 1) * count).select({ _id: 0, __v: 0 })
+    res.status(200).send(movies)
+})
+
 // Get all movies // filter
 app.get('/movies/:startYear/', async (req, res) => {
     // console.log(req.params.startYear); 
